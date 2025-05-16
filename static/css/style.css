@@ -1,0 +1,121 @@
+.navbar {
+    background-color: #006400 !important;
+}
+
+body {
+    background-color: #f5f5f5;
+}
+
+.logo {
+    max-height: 60px;
+}
+
+.search-container {
+    margin: 20px 0;
+}
+
+.table-container {
+    background-color: white;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+.footer {
+    background-color: #006400;
+    color: white;
+    text-align: center;
+    padding: 15px 0;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+
+.btn-edit {
+    background-color: #28a745;
+    color: white;
+}
+
+.btn-delete {
+    background-color: #dc3545;
+    color: white;
+}
+
+.profile-image {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-left: 10px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Dropdown and Toggle Styles */
+.dropdown-toggle::after {
+    display: none;
+}
+
+.dropdown-toggle:hover .profile-image {
+    transform: scale(1.1);
+    box-shadow: 0 0 10px rgba(255,255,255,0.3);
+}
+
+.dropdown-menu {
+    background-color: #006400;
+    border: none;
+    margin-top: 0.5rem;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    min-width: 200px;
+}
+
+.dropdown-item {
+    color: white !important;
+    padding: 0.5rem 1.5rem;
+    transition: all 0.3s ease;
+}
+
+.dropdown-item:hover {
+    background-color: #008000 !important;
+    padding-left: 2rem;
+}
+
+.dropdown-divider {
+    border-color: rgba(255,255,255,0.1);
+}
+
+/* Navbar Toggle Button */
+.navbar-toggler {
+    border: 2px solid rgba(255,255,255,0.5);
+    padding: 0.5rem;
+    transition: all 0.3s ease;
+}
+
+.navbar-toggler:hover {
+    transform: scale(1.1);
+    border-color: rgba(255,255,255,0.8);
+}
+
+.navbar-toggler:focus {
+    box-shadow: 0 0 0 0.25rem rgba(255,255,255,0.2);
+}
+
+/* New Log Button */
+.nav-item .btn-success.nav-link {
+    margin-top: 2px;
+    border-radius: 20px;
+    transition: all 0.3s ease;
+}
+
+.nav-item .btn-success.nav-link:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+/* Icon Styles */
+.dropdown-item i {
+    width: 20px;
+    margin-right: 8px;
+}
+
+.nav-link i {
+    margin-right: 5px;
+} 

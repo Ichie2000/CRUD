@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login.php - Code View</title>
+    <link rel="stylesheet" href="../css/prism.css">
+    <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Login.php</h1>
+        </header>
+        <nav class="file-tree">
+            <h2>Directory Structure</h2>
+            <ul>
+                <li>
+                    <span class="folder">📁 Root</span>
+                    <ul>
+                        <li><span class="folder">📁 img</span></li>
+                        <li><span class="folder">📁 css</span></li>
+                        <li><a href="Login.html" class="active">📄 Login.php</a></li>
+                        <li><a href="settings.html">📄 settings.php</a></li>
+                        <li><a href="Home.html">📄 Home.php</a></li>
+                        <li><a href="Input.html">📄 Input.php</a></li>
+                        <li><a href="profile.html">📄 profile.php</a></li>
+                        <li><a href="upload_picture.html">📄 upload_picture.php</a></li>
+                        <li><a href="delete.html">📄 delete.php</a></li>
+                        <li><a href="logout.html">📄 logout.php</a></li>
+                        <li><a href="edit.html">📄 edit.php</a></li>
+                        <li><a href="save_log.html">📄 save_log.php</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+        <main>
+            <div class="code-container">
+                <pre><code class="language-php"><?php
+session_start();
+
+// Consolidate cache prevention headers
+header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
+header("Pragma: no-cache");
+header("Expires: 0");
+
+// Redirect to Home page if already logged in
+if (isset($_SESSION["admin"]) && $_SESSION["admin"] === true) {
+    header("Location: Home.php");
+    exit;
+}
+
+// Process login data when form is submitted
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $username = trim($_POST["username"]);
+    $password = trim($_POST["password"]);
+
+    // Replace hardcoded credentials with secure database authentication
+    $adminUsername = getenv('ADMIN_USERNAME') ?: "admin";
+    $adminPassword = getenv('ADMIN_PASSWORD') ?: "supersecurepassword";
+
+    if ($username === $adminUsername && $password === $adminPassword) {
+        $_SESSION["admin"] = true;
+        $_SESSION["username"] = $username;
+        header("Location: Home.php");
+        exit;
+    } else {
+        $error = "Invalid admin username or password.";
+        error_log("Login failed for username: $username at " . date('Y-m-d H:i:s'));
+    }
+}
+?>
+
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;title&gt;Admin Login | Atilano B. Cabangbang Memorial High School&lt;/title&gt;
+    &lt;link rel="stylesheet" href="css/style.css"&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;div class="login-container" style="display: contents;"&gt;
+       
+        &lt;?php if (isset($error)): ?&gt;
+            &lt;div class="error"&gt;&lt;?php echo $error; ?&gt;&lt;/div&gt;
+        &lt;?php endif; ?&gt;
+
+        &lt;form action="Login.php" method="post" style="color: black;"&gt;
+            &lt;!-- Add the logo inside the login container --&gt;
+            &lt;img src="img/Logo.png" alt="School Logo"&gt;
+
+            &lt;label for="username" style="color: black; font-weight: bold;"&gt;ADMIN USERNAME:&lt;/label&gt;
+            &lt;input type="text" id="username" name="username" style="color: black; font-weight: bold;" required&gt;
+
+            &lt;label for="password" style="color: black; font-weight: bold;"&gt;ADMIN PASSWORD:&lt;/label&gt;
+            &lt;input type="password" id="password" name="password" style="width: 95%; padding: 10px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px;" required&gt;
+
+            &lt;input type="submit" value="LOGIN" style="display: block; margin: 20px auto; padding: 10px 20px; background-color: #4CAF50; color: white; border: none; border-radius: 5px; font-size: 16px; cursor: pointer; transition: background-color 0.3s ease;"&gt;
+        &lt;/form&gt;
+    &lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+            </div>
+        </main>
+    </div>
+    <script src="../js/prism.js"></script>
+</body>
+</html> 

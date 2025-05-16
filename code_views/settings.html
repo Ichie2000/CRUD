@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>settings.php - Code View</title>
+    <link rel="stylesheet" href="../css/prism.css">
+    <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>settings.php</h1>
+        </header>
+        <nav class="file-tree">
+            <h2>Directory Structure</h2>
+            <ul>
+                <li>
+                    <span class="folder">📁 Root</span>
+                    <ul>
+                        <li><span class="folder">📁 img</span></li>
+                        <li><span class="folder">📁 css</span></li>
+                        <li><a href="Login.html">📄 Login.php</a></li>
+                        <li><a href="settings.html" class="active">📄 settings.php</a></li>
+                        <li><a href="Home.html">📄 Home.php</a></li>
+                        <li><a href="Input.html">📄 Input.php</a></li>
+                        <li><a href="profile.html">📄 profile.php</a></li>
+                        <li><a href="upload_picture.html">📄 upload_picture.php</a></li>
+                        <li><a href="delete.html">📄 delete.php</a></li>
+                        <li><a href="logout.html">📄 logout.php</a></li>
+                        <li><a href="edit.html">📄 edit.php</a></li>
+                        <li><a href="save_log.html">📄 save_log.php</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+        <main>
+            <div class="code-container">
+                <pre><code class="language-php"><?php
+session_start();
+
+// Redirect to login page if the user is not logged in.
+if (!isset($_SESSION['admin']) || $_SESSION['admin'] !== true) {
+    header("Location: Login.php");
+    exit;
+}
+
+// Database connection
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "logs";
+
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+// Handle form submission
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $newUsername = $conn->real_escape_string($_POST['username']);
+    $newPassword = password_hash($_POST['password'], PASSWORD_DEFAULT);
+
+    $sql = "UPDATE admin SET username = '$newUsername', password = '$newPassword' WHERE id = 1";
+
+    if ($conn->query($sql) === TRUE) {
+        $message = "Username and password updated successfully.";
+    } else {
+        $message = "Error updating record: " . $conn->error;
+    }
+}
+
+// Fetch current username
+$sql = "SELECT username FROM admin WHERE id = 1";
+$result = $conn->query($sql);
+
+if ($result && $result->num_rows > 0) {
+    $currentUsername = $result->fetch_assoc()['username'];
+} else {
+    $currentUsername = ""; // Default to an empty string if no rows are found
+    $message = "No admin user found. Please ensure the admin table is set up correctly.";
+}
+
+$conn->close();
+?&gt;
+
+&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+    &lt;title&gt;Settings&lt;/title&gt;
+    &lt;link rel="stylesheet" href="css/style.css"&gt;
+    &lt;style&gt;
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100vh;
+            text-align: center;
+        }
+
+        .navbar {
+            width: 100%;
+            background-color: #004d00;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar .left-section {
+            display: flex;
+            align-items: center;
+        }
+
+        .navbar .left-section img {
+            margin-right: 15px;
+        }
+
+        .navbar .left-section ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+        }
+
+        .navbar .left-section ul li {
+            margin-right: 15px;
+        }
+
+        .navbar .left-section ul li a {
+            text-decoration: none;
+            color: #fff;
+            font-weight: bold;
+        }
+
+        .navbar .left-section ul li a.active {
+            text-decoration: underline;
+        }
+
+        .navbar .right-section {
+            display: flex;
+            align-items: center;
+        }
+
+        .navbar .menu-container {
+            position: relative;
+        }
+
+        .navbar .menu-button {
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        .navbar .menu-icon div {
+            width: 25px;
+            height: 3px;
+            background-color: #fff;
+            margin: 4px 0;
+        }
+
+        .navbar .menu-dropdown {
+            display: none;
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background-color: #fff;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .navbar .menu-dropdown a {
+            display: block;
+            padding: 10px 20px;
+            text-decoration: none;
+            color: #333;
+        }
+
+        .navbar .menu-dropdown a:hover {
+            background-color: #f4f4f9;
+        }
+
+        .navbar .profile {
+            display: flex;
+            align-items: center;
+            margin-left: 15px;
+        }
+
+        .navbar .profile img {
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
+        .settings-container {
+            background: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 20px 30px;
+            width: 100%;
+            max-width: 400px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .settings-container h2 {
+            margin-bottom: 20px;
+            color: #333;
+            text-align: center;
+        }
+
+        .settings-container p {
+            color: green;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .settings-container label {
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+        }
+
+        .settings-container input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .settings-container input[type="password"] {
+            width: 95%;
+        }
+
+        .settings-container button {
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .settings-container button:hover {
+            background-color: #0056b3;
+        }
+
+        .settings-container button:focus {
+            outline: none;
+        }
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;!-- Navigation bar with logo and links --&gt;
+    &lt;div class="navbar"&gt;
+        &lt;div class="left-section"&gt;
+            &lt;img src="img/Logo.png" alt="School Logo" style="max-width: 90px; height: 100%;"&gt;
+            &lt;ul&gt;
+                &lt;li&gt;&lt;a href="Home.php"&gt;HOME&lt;/a&gt;&lt;/li&gt;
+                &lt;li&gt;&lt;a href="Input.php"&gt;LOGBOOK&lt;/a&gt;&lt;/li&gt;
+            &lt;/ul&gt;
+        &lt;/div&gt;
+        &lt;div class="right-section"&gt;
+            &lt;div class="menu-container"&gt;
+                &lt;button class="menu-button"&gt;
+                    &lt;div class="menu-icon"&gt;
+                        &lt;div&gt;&lt;/div&gt;
+                        &lt;div&gt;&lt;/div&gt;
+                        &lt;div&gt;&lt;/div&gt;
+                    &lt;/div&gt;
+                &lt;/button&gt;
+                &lt;div class="menu-dropdown"&gt;
+                    &lt;a href="profile.php"&gt;Profile&lt;/a&gt;</code></pre>
+            </div>
+        </main>
+    </div>
+    <script src="../js/prism.js"></script>
+</body>
+</html> 

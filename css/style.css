@@ -1,0 +1,503 @@
+/* Base styles for a clean, green-themed page */
+html {
+    height: 100%;
+}
+body {
+    overflow-y: scroll; /* Enable vertical scrolling */
+    height: 200%; /* Ensure the body takes up the full height of the viewport */
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    background: url('../img/background.png') no-repeat center center fixed;
+    background-size: cover;
+    font-family: Arial, sans-serif;
+    justify-content: flex-start; /* Align content to the top */
+    align-items: stretch; /* Allow content to stretch horizontally */
+    background-color: rgb(240, 240, 240);
+    padding-top: 120px; /* Add padding to prevent content overlap with the fixed navbar */
+    padding-bottom: 0; /* Remove padding to ensure footer is at the lowest point */
+}
+
+/* Navigation bar styling */
+.navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* Ensure left and right sections are spaced correctly */
+    background-color: #004d00;
+    padding: 10px; /* Adjust padding for better spacing */
+    width: 90%; /* Reduce the width of the navbar */
+    max-width: none; /* Remove any restrictions on the maximum width */
+    border-radius: 15px; /* Add curved edges to the navbar */
+    margin: 0 auto; /* Center the navbar horizontally */
+    height: 110px; /* Maintain consistent height */
+    position: fixed; /* Fix the navbar at the top */
+    top: 0; /* Align it to the top of the page */
+    z-index: 1000; /* Ensure it stays above other elements */
+}
+.navbar .left-section {
+    display: flex;
+    align-items: center;
+    gap: 15px; /* Add spacing between logo and links */
+}
+.navbar .right-section {
+    display: flex;
+    flex-direction: row; /* Align items horizontally */
+    align-items: center; /* Vertically align items */
+    justify-content: flex-end; /* Align items to the right */
+    gap: 10px; /* Add spacing between menu icon and profile */
+}
+.navbar .right-section .profile {
+    flex-direction: column; /* Stack the profile picture and name vertically */
+    align-items: center; /* Center-align the items */
+}
+.navbar .right-section .profile span {
+    margin: 0; /* Remove margin to align text directly under the picture */
+}
+.navbar .profile {
+    display: flex;
+    flex-direction: row; /* Align items horizontally */
+    align-items: center; /* Center align the picture and name */
+    margin-left: -10px; /* Move the profile section slightly to the left */
+    position: relative; /* Enable dropdown positioning */
+}
+.navbar .profile img {
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
+    margin-right: 10px;
+    cursor: pointer; /* Make the profile picture clickable */
+}
+.navbar .profile span {
+    color: white;
+    font-weight: bold;
+}
+.menu-container {
+    position: relative;
+    display: inline-block;
+    margin-left: 5px; /* Adjust spacing to move the menu icon slightly to the left */
+    order: 0; /* Reset the order to place the menu icon back to the right of the profile */
+}
+.menu-button {
+    padding: 10px 20px;
+    background-color: #004d00;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.menu-button:hover .menu-icon, .menu-button:active .menu-icon {
+    transform: none; /* Prevent scaling or size changes */
+}
+.menu-dropdown {
+    display: none;
+    position: absolute;
+    background-color: #004d00;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+    border-radius: 5px;
+}
+.menu-dropdown a {
+    color: white;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+.menu-dropdown a:hover {
+    background-color: #003300;
+}
+.menu-container:hover .menu-dropdown {
+    display: block;
+}
+.navbar img {
+    height:200px; /* Increase the logo size */
+    margin-right: 20px;
+}
+.navbar ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+}
+.navbar ul li {
+    margin: 0 15px;
+}
+.navbar a {
+    color: white; /* Set default color to white */
+    text-decoration: none; /* Remove underline */
+    font-size: 18px;
+    font-weight: bold;
+    padding: 5px 10px; /* Add padding for better click area */
+}
+.navbar a.active {
+    color: lightblue; /* Highlight the active link */
+}
+.navbar a:hover {
+    color: lightblue; /* Change color on hover */
+}
+
+/* Hero section with background image and overlaid text */
+.hero {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 80vh; /* Occupy most of the viewport height */
+    text-align: center;
+    margin-bottom: 20px; /* Add spacing below the welcome text */
+}
+.hero .welcome {
+    font-size: 64px;
+    font-weight: bold;
+    color: white;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+}
+
+/* School information overlay at the bottom left */
+.school-info {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    text-align: left;
+    color: white;
+}
+.school-info h1 {
+    margin: 0;
+    font-size: 36px;
+}
+.school-info p {
+    margin: 5px 0;
+    font-size: 18px;
+}
+
+/* Footer styling */
+.footer {
+    position: fixed; /* Ensure footer is always at the bottom */
+    bottom: 0;
+    left: 0;
+    width: 100%; /* Make it span the full width of the viewport */
+    background-color: #004d00;
+    color: #fff;
+    text-align: center;
+    padding: 20px; /* Ensure proper spacing */
+    font-size: 16px; /* Adjust font size for readability */
+}
+
+/* Profile picture styling */
+.profile {
+    position: absolute;
+    top: 10px;
+    left: 10px; /* Move profile to the left */
+    display: flex;
+    align-items: center;
+}
+.profile img {
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+.profile span {
+    color: white;
+    font-weight: bold;
+}
+
+/* Adjust the profile picture in the profile container */
+.profile-container .profile-picture {
+    position: absolute; /* Position it absolutely */
+    top: 20px; /* Place it near the top */
+    right: 20px; /* Align it to the right */
+    width: 400px; /* Increase the size */
+    height: 200px; /* Maintain a larger height */
+    border-radius: 50%; /* Keep it circular */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); /* Add a more prominent shadow */
+    font-size: 20px; /* Adjust font size for profile text if any */
+    color: white; /* Ensure text is white */
+}
+
+/* Style for the profile container */
+.profile-container {
+    color: white; /* White text color */
+    font-size: 20px; /* Larger text size */
+    font-weight: bold; /* Bold text */
+    background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent black background */
+    padding: 20px; /* Add padding inside the box */
+    border-radius: 15px; /* Curved edges */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Add a subtle shadow */
+    max-width: 600px; /* Limit the width of the box */
+    margin: 20px auto; /* Center the box horizontally */
+}
+
+/* Style for the table headers and data */
+.profile-container th {
+    font-size: 22px; /* Even larger text size for headers */
+    color: white; /* White text color */
+    font-weight: bold; /* Bold text */
+}
+
+.profile-container td {
+    font-size: 20px; /* Even larger text size for data */
+    color: white; /* White text color */
+    font-weight: bold; /* Bold text */
+}
+
+.content-container {
+    flex: 1; /* Push the footer to the very bottom */
+    margin: 20px auto;
+    max-width: 800px;
+    text-align: center;
+}
+
+/* Make the data box scrollable within its container */
+.data-box {
+    flex: 1; /* Allow the data box to grow and take available space */
+    max-height: 400px; /* Set a maximum height for the data box */
+    overflow-y: auto; /* Enable vertical scrolling */
+    overflow-x: hidden; /* Prevent horizontal scrolling */
+    margin-top: 20px;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+}
+
+.data-box h2 {
+    margin-bottom: 15px;
+}
+
+/* Increase the size of the table and its text */
+.data-box table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 18px; /* Increase font size for better readability */
+}
+
+.data-box th, .data-box td {
+    padding: 12px; /* Increase padding for better spacing */
+    text-align: center; /* Center align the content */
+    vertical-align: middle; /* Center align vertically */
+}
+
+.data-box table th:nth-child(2),
+.data-box table td:nth-child(2) {
+    width: 150px; /* Set a wider width for the 'Time' column */
+}
+
+/* Adjust the width of the 'Purpose' and 'Date' columns to match the 'Time' column */
+.data-box table th:nth-child(3),
+.data-box table td:nth-child(3),
+.data-box table th:nth-child(4),
+.data-box table td:nth-child(4) {
+    width: 150px; /* Set a consistent width for these columns */
+}
+
+.data-box th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+}
+
+.menu-icon {
+    width: 30px;
+    height: 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+.menu-icon div {
+    width: 100%;
+    height: 5px;
+    background-color: white; /* Change color to white */
+}
+
+/* Style the search bar to make it larger with curved edges */
+.search-container input {
+    width: 90%; /* Make the search bar take full width */
+    padding: 12px 20px; /* Increase padding for a larger appearance */
+    font-size: 16px; /* Increase font size */
+    border: 1px solid #ccc; /* Add a border */
+    border-radius: 25px; /* Add curved edges */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Add a subtle shadow */
+    outline: none; /* Remove outline on focus */
+    transition: box-shadow 0.3s ease; /* Smooth transition for focus effect */
+}
+
+.search-container input:focus {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Enhance shadow on focus */
+    border-color: #4CAF50; /* Change border color on focus */
+}
+
+/* Style the search bar to position it above the data box */
+.search-container {
+    margin-bottom: 10px; /* Add spacing between the search bar and the data box */
+    text-align: center; /* Center-align the search bar */
+}
+
+/* Style the edit form to make it aesthetic */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f9;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+h2 {
+    text-align: center;
+    color: #333;
+}
+
+form {
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: #555;
+}
+
+input[type="text"], input[type="date"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-size: 14px;
+}
+
+button {
+    width: 100%;
+    padding: 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+/* Style for the profile picture aligned to the left */
+.profile-picture-left {
+    display: block;
+    margin: 20px auto 20px 20px; /* Add margin to position it below the navbar and to the left */
+    width: 150px; /* Set a fixed width */
+    height: 150px; /* Set a fixed height */
+    border-radius: 50%; /* Make it circular */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Add a subtle shadow */
+    float: left; /* Align it to the left */
+}
+
+/* Completely remove the container styling */
+.container {
+    display: contents; /* Remove the container box entirely */
+}
+
+/* Style for the inner header box */
+.header {
+    background-color: transparent !important; /* Force removal of background color */
+    padding: 0; /* Remove padding */
+    border-radius: 0; /* Remove rounded corners */
+    text-align: left; /* Align text to the left */
+    font-size: inherit; /* Reset font size */
+    font-weight: normal; /* Reset font weight */
+}
+
+/* Adjust the input group for the purpose field */
+.input-group textarea {
+    resize: none; /* Disable resizing for the purpose text box */
+}
+
+/* Reset the input and textarea boxes */
+.input-group input, .input-group textarea {
+    width: 100%; /* Full width within the container */
+    padding: 10px; /* Standard padding for usability */
+    border: 1px solid #ccc; /* Light border for clarity */
+    border-radius: 5px; /* Rounded corners for a clean look */
+    box-sizing: border-box; /* Include padding and border in the element's total width and height */
+    font-size: 14px; /* Standard font size */
+    margin: 10px 0; /* Add spacing between elements */
+}
+
+.header h1 {
+    margin: 0; /* Remove default margin */
+    padding: 10px; /* Add padding for spacing */
+    text-align: center; /* Center-align the text */
+    font-size: 24px; /* Adjust font size for better visibility */
+    font-weight: bold; /* Make the text bold */
+}
+
+/* Add styles to make tables scrollable and ensure proper layout for long content */
+.table-container {
+    max-width: 100%;
+    overflow: visible; /* Allow the table to display fully */
+    margin: 20px 0;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+table th, table td {
+    border: 1px solid #ccc;
+    padding: 8px;
+    text-align: left;
+    word-wrap: break-word;
+}
+
+table th {
+    background-color: #f4f4f4;
+}
+
+/* Style the Edit and Delete buttons to make them more aesthetic */
+.edit-button, .delete-button {
+    display: inline-block;
+    padding: 10px 15px; /* Add more padding for better appearance */
+    margin: 5px; /* Add spacing between buttons */
+    text-decoration: none;
+    font-size: 16px; /* Increase font size for readability */
+    border-radius: 8px; /* Add rounded corners */
+    color: #fff;
+    transition: all 0.3s ease; /* Smooth transition for hover effects */
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Add subtle shadow */
+}
+
+.edit-button {
+    background-color: #4CAF50; /* Green background */
+    border: 2px solid #45a049; /* Add border */
+}
+
+.edit-button:hover {
+    background-color: #45a049; /* Darker green on hover */
+    transform: scale(1.05); /* Slightly enlarge on hover */
+}
+
+.delete-button {
+    background-color: #f44336; /* Red background */
+    border: 2px solid #d32f2f; /* Add border */
+}
+
+.delete-button:hover {
+    background-color: #d32f2f; /* Darker red on hover */
+    transform: scale(1.05); /* Slightly enlarge on hover */
+}

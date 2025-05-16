@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home.php - Code View</title>
+    <link rel="stylesheet" href="../css/prism.css">
+    <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Home.php</h1>
+        </header>
+        <nav class="file-tree">
+            <h2>Directory Structure</h2>
+            <ul>
+                <li>
+                    <span class="folder">📁 Root</span>
+                    <ul>
+                        <li><span class="folder">📁 img</span></li>
+                        <li><span class="folder">📁 css</span></li>
+                        <li><a href="Login.html">📄 Login.php</a></li>
+                        <li><a href="settings.html">📄 settings.php</a></li>
+                        <li><a href="Home.html" class="active">📄 Home.php</a></li>
+                        <li><a href="Input.html">📄 Input.php</a></li>
+                        <li><a href="profile.html">📄 profile.php</a></li>
+                        <li><a href="upload_picture.html">📄 upload_picture.php</a></li>
+                        <li><a href="delete.html">📄 delete.php</a></li>
+                        <li><a href="logout.html">📄 logout.php</a></li>
+                        <li><a href="edit.html">📄 edit.php</a></li>
+                        <li><a href="save_log.html">📄 save_log.php</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+        <main>
+            <div class="code-container">
+                <pre><code class="language-php"><?php
+// index.php
+
+// Start the session to ensure session variables are accessible.
+session_start();
+
+// Debugging: Check session status
+if (session_status() !== PHP_SESSION_ACTIVE) {
+    error_log("Session is not active.");
+}
+
+// Cache prevention headers to prevent access to cached pages after logout.
+header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
+header("Cache-Control: post-check=0, pre-check=0", false);
+header("Pragma: no-cache");
+
+// Redirect to login page if the user is not logged in.
+if (!isset($_SESSION['admin']) || $_SESSION['admin'] !== true) {
+    header("Location: Login.php");
+    exit;
+}
+
+// Database connection
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "logs";
+
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+// Debugging: Check database connection
+if ($conn->connect_error) {
+    error_log("Database connection failed: " . $conn->connect_error);
+    die("Connection failed: " . $conn->connect_error);
+} else {
+    error_log("Database connection successful.");
+}
+
+// Fetch data from the updated table
+$sql = "SELECT id, name, TIME_FORMAT(time, '%h:%i:%s %p') as time, purpose, date FROM record ORDER BY id DESC LIMIT 10";
+$result = $conn->query($sql);
+
+// Debugging: Check SQL query execution
+if (!$result) {
+    error_log("SQL query failed: " . $conn->error);
+} else {
+    error_log("SQL query executed successfully.");
+}
+
+// Get the current date
+$currentDate = date('F d, Y');
+?&gt;
+
+&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;title&gt;Atilano B. Cabangal Memorial High School&lt;/title&gt;
+    &lt;link rel="stylesheet" href="css/style.css"&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;!-- Navigation bar with logo and links --&gt;
+    &lt;div class="navbar"&gt;
+        &lt;div class="left-section"&gt;
+            &lt;img src="img/Logo.png" alt="School Logo" style="max-width: 90px; height: 100%;"&gt;
+            &lt;ul&gt;
+                &lt;li&gt;&lt;a href="Home.php" class="active"&gt;HOME&lt;/a&gt;&lt;/li&gt;
+                &lt;li&gt;&lt;a href="Input.php"&gt;LOGBOOK&lt;/a&gt;&lt;/li&gt;
+            &lt;/ul&gt;
+        &lt;/div&gt;
+        &lt;div class="right-section"&gt;
+            &lt;div class="menu-container"&gt;
+                &lt;button class="menu-button"&gt;
+                    &lt;div class="menu-icon"&gt;
+                        &lt;div&gt;&lt;/div&gt;
+                        &lt;div&gt;&lt;/div&gt;
+                        &lt;div&gt;&lt;/div&gt;
+                    &lt;/div&gt;
+                &lt;/button&gt;
+                &lt;div class="menu-dropdown"&gt;
+                    &lt;a href="profile.php"&gt;Profile&lt;/a&gt;
+                    &lt;a href="settings.php"&gt;Settings&lt;/a&gt;
+                    &lt;a href="logout.php"&gt;Logout&lt;/a&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;div class="profile"&gt;
+                &lt;img src="img/PIC.png" alt="Profile Picture" style="width: 80px; height: 80px;"&gt;
+                &lt;span&gt;&lt;b&gt;Richiem Labatos&lt;/b&gt;&lt;/span&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div class="data-box"&gt;
+        &lt;div class="search-container"&gt;
+            &lt;input type="text" id="searchInput" placeholder="Search logs..."&gt;
+        &lt;/div&gt;
+        &lt;h2&gt;Recent Logs&lt;/h2&gt;
+        &lt;table&gt;
+            &lt;thead&gt;
+                &lt;tr&gt;
+                    &lt;th&gt;Name&lt;/th&gt;
+                    &lt;th&gt;Time&lt;/th&gt;
+                    &lt;th&gt;Purpose&lt;/th&gt;
+                    &lt;th&gt;Date&lt;/th&gt;
+                    &lt;th&gt;Actions&lt;/th&gt;
+                &lt;/tr&gt;
+            &lt;/thead&gt;
+            &lt;tbody&gt;
+                &lt;?php if ($result->num_rows > 0): ?&gt;
+                    &lt;?php while ($row = $result->fetch_assoc()): ?&gt;
+                        &lt;tr&gt;
+                            &lt;td&gt;&lt;?php echo htmlspecialchars($row['name']); ?&gt;&lt;/td&gt;
+                            &lt;td&gt;&lt;?php echo htmlspecialchars($row['time']); ?&gt;&lt;/td&gt;
+                            &lt;td&gt;&lt;?php echo htmlspecialchars($row['purpose']); ?&gt;&lt;/td&gt;
+                            &lt;td&gt;&lt;?php echo htmlspecialchars($row['date']); ?&gt;&lt;/td&gt;
+                            &lt;td&gt;
+                                &lt;a href="edit.php?id=&lt;?php echo $row['id']; ?&gt;" class="edit-button"&gt;Edit&lt;/a&gt;
+                                &lt;a href="delete.php?id=&lt;?php echo $row['id']; ?&gt;" class="delete-button" onclick="return confirm('Are you sure you want to delete this record?');"&gt;Delete&lt;/a&gt;
+                            &lt;/td&gt;
+                        &lt;/tr&gt;
+                    &lt;?php endwhile; ?&gt;
+                &lt;?php else: ?&gt;
+                    &lt;tr&gt;
+                        &lt;td colspan="5"&gt;No logs found.&lt;/td&gt;
+                    &lt;/tr&gt;
+                &lt;?php endif; ?&gt;
+            &lt;/tbody&gt;
+        &lt;/table&gt;
+    &lt;/div&gt;
+
+    &lt;?php $conn->close(); ?&gt;
+
+    &lt;script&gt;
+        // JavaScript to dynamically highlight the active navigation link
+        document.addEventListener('DOMContentLoaded', function() {
+            const navLinks = document.querySelectorAll('.navbar a');
+
+            navLinks.forEach(link => {
+                link.addEventListener('click', function() {
+                    // Reset all links to their default color
+                    navLinks.forEach(nav => nav.classList.remove('active'));
+
+                    // Set the clicked link as active
+                    this.classList.add('active');
+                });
+            });
+
+            // Search functionality for filtering table rows
+            const searchInput = document.getElementById('searchInput');
+            const tableRows = document.querySelectorAll('.data-box tbody tr');
+
+            searchInput.addEventListener('input', function() {
+                const filter = searchInput.value.toLowerCase();
+
+                tableRows.forEach(row => {
+                    const cells = row.querySelectorAll('td');
+                    const rowText = Array.from(cells).map(cell => cell.textContent.toLowerCase()).join(' ');
+
+                    if (rowText.includes(filter)) {
+                        row.style.display = '';
+                    } else {
+                        row.style.display = 'none';
+                    }
+                });
+            });
+        });
+
+        // Forcefully clear the browser cache when the back button is clicked
+        window.onload = function() {
+            if (performance.navigation.type === 2) { // Check if navigation type is 'back/forward'
+                location.reload(true); // Force reload from the server
+            }
+        };
+    &lt;/script&gt;
+
+    &lt;!-- Footer with copyright notice --&gt;
+    &lt;div class="footer"&gt;
+        &lt;p&gt;All Rights reserved to Atilano B. Cabangal Memorial High School (2025)&lt;/p&gt;
+    &lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+            </div>
+        </main>
+    </div>
+    <script src="../js/prism.js"></script>
+</body>
+</html> 

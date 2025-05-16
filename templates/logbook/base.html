@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Log Book{% endblock %}</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <!-- Custom CSS -->
+    <style>
+        .navbar {
+            background-color: #28a745 !important;
+        }
+        .navbar-brand, .nav-link {
+            color: white !important;
+        }
+        .nav-link:hover {
+            color: rgba(255,255,255,0.8) !important;
+        }
+        body {
+            background-color: #f8f9fa;
+        }
+        .card {
+            border: none;
+            border-radius: 15px;
+        }
+        .card-header {
+            border-radius: 15px 15px 0 0 !important;
+        }
+        .logout-form {
+            display: inline;
+        }
+        .logout-btn {
+            background: none;
+            border: none;
+            color: white;
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+        }
+        .logout-btn:hover {
+            color: rgba(255,255,255,0.8);
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-success mb-4">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'logbook:home' %}">
+                <i class="fas fa-book-open mr-2"></i>Log Book
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    {% if user.is_authenticated %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" onclick="return showProfileModal();">
+                                <i class="fas fa-user mr-1"></i>Profile
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <form method="post" action="{% url 'logbook:logout' %}" class="logout-form" onsubmit="return confirmLogout();">
+                                {% csrf_token %}
+                                <button type="submit" class="nav-link logout-btn">
+                                    <i class="fas fa-sign-out-alt mr-1"></i>Logout
+                                </button>
+                            </form>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'logbook:login' %}">
+                                <i class="fas fa-sign-in-alt mr-1"></i>Login
+                            </a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            {% endfor %}
+        {% endif %}
+        
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- New Log Modal -->
+    <div class="modal fade" id="newLogModal" tabindex="-1" role="dialog" aria-labelledby="newLogModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title" id="newLogModalLabel">Add New Log</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="newLogForm" method="POST" action="{% url 'logbook:create_log' %}" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div id="newLogFormContent">
+                            <!-- Form content will be loaded here -->
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button type="submit" form="newLogForm" class="btn btn-primary">Save Log</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Log Modal -->
+    <div class="modal fade" id="editLogModal" tabindex="-1" role="dialog" aria-labelledby="editLogModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title" id="editLogModalLabel">Edit Log</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="editLogForm" method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div id="editLogFormContent">
+                            <!-- Form content will be loaded here -->
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button type="submit" form="editLogForm" class="btn btn-primary">Save Changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Profile Modal -->
+    <div class="modal fade" id="profileModal" tabindex="-1" role="dialog" aria-labelledby="profileModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-success text-white">
+                    <h5 class="modal-title" id="profileModalLabel">Edit Profile</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="profileForm" method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div id="profileFormContent">
+                            <!-- Form content will be loaded here -->
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button type="submit" form="profileForm" class="btn btn-success">Save Profile</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div class="modal fade" id="deleteConfirmModal" tabindex="-1" role="dialog" aria-labelledby="deleteConfirmModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title" id="deleteConfirmModalLabel">Confirm Delete</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to delete this log?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <form id="deleteForm" method="POST" style="display: inline;">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger">Delete</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    
+    <!-- Custom JavaScript -->
+    <script>
+        function confirmLogout() {
+            return confirm('Are you sure you want to logout?');
+        }
+
+        function showDeleteConfirmation(deleteUrl) {
+            document.getElementById('deleteForm').action = deleteUrl;
+            $('#deleteConfirmModal').modal('show');
+            return false;
+        }
+
+        function showNewLogModal() {
+            // Load the form content via AJAX
+            $.get("{% url 'logbook:create_log' %}", function(data) {
+                // Update the form content with the received HTML
+                $('#newLogFormContent').html(data.form_html);
+                // Show the modal
+                $('#newLogModal').modal('show');
+            });
+            return false;
+        }
+
+        function showEditLogModal(editUrl) {
+            // Load the form content via AJAX
+            $.get(editUrl, function(data) {
+                // Update the form content with the received HTML
+                $('#editLogFormContent').html(data.form_html);
+                // Set the form action URL
+                $('#editLogForm').attr('action', editUrl);
+                // Show the modal
+                $('#editLogModal').modal('show');
+            });
+            return false;
+        }
+
+        function showProfileModal() {
+            // Load the form content via AJAX
+            $.get("{% url 'logbook:profile' %}", function(data) {
+                // Update the form content with the received HTML
+                $('#profileFormContent').html(data.form_html);
+                // Show the modal
+                $('#profileModal').modal('show');
+            });
+            return false;
+        }
+
+        // Handle form submissions
+        $(document).ready(function() {
+            // New Log form submission
+            $('#newLogForm').on('submit', function(e) {
+                e.preventDefault();
+                submitFormViaAjax($(this), '#newLogModal', '#newLogFormContent');
+            });
+
+            // Edit Log form submission
+            $('#editLogForm').on('submit', function(e) {
+                e.preventDefault();
+                submitFormViaAjax($(this), '#editLogModal', '#editLogFormContent');
+            });
+
+            // Profile form submission
+            $('#profileForm').on('submit', function(e) {
+                e.preventDefault();
+                submitFormViaAjax($(this), '#profileModal', '#profileFormContent');
+            });
+        });
+
+        // Helper function for form submissions
+        function submitFormViaAjax(form, modalId, formContentId) {
+            const formData = new FormData(form[0]);
+
+            $.ajax({
+                url: form.attr('action'),
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function(response) {
+                    if (response.success) {
+                        // Close the modal
+                        $(modalId).modal('hide');
+                        // Reload the page to show changes
+                        window.location.reload();
+                    } else {
+                        // Update the form with errors
+                        $(formContentId).html(response.form_html);
+                    }
+                },
+                error: function() {
+                    alert('An error occurred. Please try again.');
+                }
+            });
+        }
+    </script>
+
+    {% block extra_js %}{% endblock %}
+</body>
+</html> 
